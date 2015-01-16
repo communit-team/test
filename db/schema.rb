@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150113101545) do
+ActiveRecord::Schema.define(version: 20150115203726) do
+
+  create_table "follow_relations", force: true do |t|
+    t.integer  "follower_id"
+    t.integer  "following_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.datetime "created_at"
@@ -19,6 +26,10 @@ ActiveRecord::Schema.define(version: 20150113101545) do
     t.string   "uid"
     t.string   "name"
     t.string   "oauth_token"
+    t.datetime "oauth_expires_at"
+    t.integer  "number_of_followers"
+    t.text     "profile_image_url"
+    t.text     "screen_name"
   end
 
 end
