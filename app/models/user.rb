@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   has_many :following, through: :active_relationships, source: :following
   has_many :followers, through: :passive_relationships
 
+
   after_initialize :assign_defaults
 
   def self.from_omniauth(auth)
@@ -18,23 +19,30 @@ class User < ActiveRecord::Base
       user.uid = auth.uid
       user.name = auth.info.name
       user.oauth_token = auth.credentials.token
+      user.number_of_followers = auth.extra.raw_info.followers_count
+      user.screen_name = auth.extra.raw_info.screen_name
+      user.profile_image_url = auth.extra.raw_info.profile_image_url.to_s,
       user.save!
     end
   end
 
   def fetch_followers(client)
-    new_number_of_followers = client.followers.count #O(1)
-    delta = new_number_of_followers -  number_of_followers
-    update(number_of_followers: new_number_of_followers) unless delta == 0
-    get_and_save_new_followers client, delta
-  end
+    api_followers = client.followers
 
-  def get_and_save_new_followers(client, delta)
-    new_followers = client.followers.take delta #O(1)
-    new_followers.each do |new_follower|
-      user = User.find_by(uid: new_follower.id) || create_with_twitter_params(new_follower)
-      user.follow self
+    api_followers.each do |follower|
+      if not followers.map(&:uid).include?(follower.id.to_s)
+        user = User.find_by(uid: follower.id) || create_with_twitter_params(follower)
+        user.follow self
+      end
     end
+
+    followers.each do |follower|
+      if not api_followers.map{|f| f.id.to_s}.include?(follower.uid)
+        user = User.find_by(uid: follower.uid)
+        user.unfollow self
+      end
+    end
+
   end
 
   def follow(user)
@@ -43,6 +51,11 @@ class User < ActiveRecord::Base
 
   def unfollow(user)
     active_relationships.find_by(following_id: user.id).destroy
+    UnfollowRelation.create(unfollowing_id: user.id, unfollower_id: id) rescue nil?
+  end
+
+  def new_followers
+    passive_relationships.where(new:   :true)
   end
 
   private
