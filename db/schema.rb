@@ -11,14 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150115203726) do
+ActiveRecord::Schema.define(version: 20150117184326) do
 
   create_table "follow_relations", force: true do |t|
     t.integer  "follower_id"
     t.integer  "following_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "engaged"
+    t.boolean  "new",          default: true
   end
+
+  create_table "unfollow_relations", force: true do |t|
+    t.integer  "unfollower_id"
+    t.integer  "unfollowing_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "unfollow_relations", ["unfollower_id", "unfollowing_id"], name: "index_unfollow_relations_on_unfollower_id_and_unfollowing_id", unique: true
+  add_index "unfollow_relations", ["unfollower_id"], name: "index_unfollow_relations_on_unfollower_id"
+  add_index "unfollow_relations", ["unfollowing_id"], name: "index_unfollow_relations_on_unfollowing_id"
 
   create_table "users", force: true do |t|
     t.datetime "created_at"
