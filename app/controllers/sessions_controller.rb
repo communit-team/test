@@ -4,6 +4,7 @@ class SessionsController < ApplicationController
     session[:user_id] = user.id
     session[:access_token] = auth_hash['credentials']['token']
     session[:access_token_secret] = auth_hash['credentials']['secret']
+    user.fetch_followers client #delayed job
     redirect_to '/dashboard'
   end
 
