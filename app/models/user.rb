@@ -11,7 +11,6 @@ class User < ActiveRecord::Base
   has_many :following, through: :active_relationships, source: :following
   has_many :followers, through: :passive_relationships
 
-
   after_initialize :assign_defaults
 
   def self.from_omniauth(auth)
@@ -58,7 +57,7 @@ class User < ActiveRecord::Base
   end
 
   def new_followers
-    passive_relationships.where(new: :true)
+    User.where(id: [passive_relationships.where(new: :true).map(&:follower_id)])
   end
 
   private
