@@ -23,16 +23,19 @@ class User < ActiveRecord::Base
       user.screen_name = auth.extra.raw_info.screen_name
       user.profile_image_url = auth.extra.raw_info.profile_image_url.to_s,
       user.save!
+      @@new_user = true
     end
   end
 
   def fetch_followers(client)
     api_followers = client.followers
+    current_index = 0
 
     api_followers.each do |follower|
       if not followers.map(&:uid).include?(follower.id.to_s)
+        current_index += 1
         user = User.find_by(uid: follower.id) || create_with_twitter_params(follower)
-        user.follow self
+        user.follow self, last_ten_percent(api_followers.to_a.size, current_index)
       end
     end
 
@@ -45,8 +48,8 @@ class User < ActiveRecord::Base
 
   end
 
-  def follow(user)
-    active_relationships.create(following_id: user.id)
+  def follow(user, new = true)
+    active_relationships.create(following_id: user.id, new: new)
   end
 
   def unfollow(user)
@@ -55,10 +58,14 @@ class User < ActiveRecord::Base
   end
 
   def new_followers
-    passive_relationships.where(new:   :true)
+    passive_relationships.where(new: :true)
   end
 
   private
+
+  def last_ten_percent(total_size, current_index)
+    not @@new_user or current_index > total_size * 0.9
+  end
 
   def create_with_twitter_params(params)
     User.create!(
