@@ -3,7 +3,8 @@ window.Communit2 =
   Collections: {}
   Views: {}
   Routers: {}
-  initialize: -> 
+  Pages: {}
+  initialize: ->
 
 $(document).ready ->
   Communit2.initialize()
