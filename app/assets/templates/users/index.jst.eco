@@ -1,0 +1,23 @@
+<div>
+  <div>
+    <img src="<%=@profile_image_url%>" />
+  </div>
+  <div>
+    <div>
+      <%=@name%>
+      @<%=@screen_name%>
+    </div>
+    <div>
+      Tag
+      Following you
+    </div>
+    <div>
+      Button Follow
+      Button Say Hi
+    </div>
+  </div>
+  <div>
+    X
+  </div>
+</div>
+
