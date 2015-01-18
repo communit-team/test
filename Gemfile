@@ -13,6 +13,8 @@ gem 'omniauth-twitter'
 gem 'figaro'
 gem 'slim-rails'
 gem 'twitter'
+gem 'backbone-on-rails'
+
 
 group :doc do
   gem 'sdoc', require: false
