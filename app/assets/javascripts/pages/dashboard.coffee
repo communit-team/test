@@ -1,11 +1,28 @@
 class Communit2.Pages.Dashboard
 
   @current_new_follower_index = 1
+  @current_unfollower_index = 1
 
   @initialize: ->
     @get_new_follower()
     @get_new_follower()
     @get_new_follower()
+    @get_unfollower()
+    @get_unfollower()
+    @get_unfollower()
+
+  @get_unfollower: ->
+    @get_unfollower_by_index(@current_unfollower_index)
+    @current_unfollower_index++
+
+  @get_unfollower_by_index: (index) ->
+    $.ajax(
+      url: "users/unfollower"
+      data: {index: index}
+    ).done( (response) =>
+      @render_follower(response, '#new-unfollowers-container')
+    )
+
 
   @get_new_follower: ->
     @get_new_follower_by_index(@current_new_follower_index)
@@ -16,7 +33,7 @@ class Communit2.Pages.Dashboard
       url: "users/new_follower"
       data: {index: index}
     ).done( (response) =>
-      @render_new_follower(response)
+      @render_follower(response, '#new-followers-container')
     )
 
   @dismiss: (id) ->
@@ -25,11 +42,12 @@ class Communit2.Pages.Dashboard
       data: {id: id, index: @current_new_follower_index}
     ).done( (response) =>
       $("#user-widget-#{id}").fadeOut()
-      @render_new_follower(response)
+      @render_follower(response, '#new-followers-container')
     )
 
-  @render_new_follower: (data) ->
+  @render_follower: (data, container) ->
     if data
       user = new Communit2.Models.User data
       userView = new Communit2.Views.Users model: user
-      $('#new-followers-container').append userView.render().$el
+      $(container).append userView.render().$el
+

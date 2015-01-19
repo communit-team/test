@@ -61,6 +61,10 @@ class User < ActiveRecord::Base
     User.where(id: [passive_relationships.where(new: :true).map(&:follower_id)])
   end
 
+  def unfollowers
+    User.joins('join unfollow_relations on users.id = unfollow_relations.unfollower_id')
+  end
+
   private
 
   def last_ten_percent(total_size, current_index)
