@@ -9,11 +9,10 @@
     </div>
     <div>
       Tag
-      Following you
+      Not Following you
     </div>
     <div>
-      Button Follow
-      Button Say Hi
+      Button UnFollow
     </div>
   </div>
   <div onclick='Communit2.Pages.Dashboard.dismiss_unfollower(<%=@id%>)'>

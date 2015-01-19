@@ -35,6 +35,9 @@ class User < ActiveRecord::Base
       if not followers.map(&:uid).include?(follower.id.to_s)
         current_index += 1
         user = User.find_by(uid: follower.id) || create_with_twitter_params(follower)
+        if follower.following
+          self.follow user
+        end
         user.follow self, last_ten_percent(api_followers.to_a.size, current_index)
       end
     end
@@ -63,6 +66,10 @@ class User < ActiveRecord::Base
 
   def unfollowers
     User.joins('join unfollow_relations on users.id = unfollow_relations.unfollower_id').where('unfollow_relations.unfollowing_id = ?', id).all
+  end
+
+  def following?(user)
+    following.include?(user) if following
   end
 
   private

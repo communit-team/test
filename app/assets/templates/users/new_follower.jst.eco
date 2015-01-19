@@ -12,8 +12,12 @@
       Following you
     </div>
     <div>
-      Button Follow
-      Button Say Hi
+      <% if @following: %>
+        unfollow
+      <% else: %>
+        follow
+      <% end %>
+      Say Hi
     </div>
   </div>
   <div onclick='Communit2.Pages.Dashboard.dismiss_new_follower(<%=@id%>)'>
