@@ -1,6 +1,14 @@
 class Communit2.Views.Users extends Backbone.View
-  template: JST['users/index']
+  newFollowerTemplate: JST['users/new_follower']
+  newUnfollowerTemplate: JST['users/new_unfollower']
 
-  render: ->
-    @$el.html @template(@model.toJSON())
-    @
+  render: (container) ->
+    if container == '#new-followers-container'
+      @$el.html @newFollowerTemplate(@model.toJSON())
+      return @
+
+    if container == '#new-unfollowers-container'
+      @$el.html @newUnfollowerTemplate(@model.toJSON())
+      return @
+
+

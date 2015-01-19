@@ -16,7 +16,7 @@
       Button Say Hi
     </div>
   </div>
-  <div onclick='Communit2.Pages.Dashboard.dismiss(<%=@id%>)'>
+  <div onclick='Communit2.Pages.Dashboard.dismiss_new_follower(<%=@id%>)'>
     X
   </div>
 </div>

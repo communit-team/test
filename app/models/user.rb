@@ -53,16 +53,16 @@ class User < ActiveRecord::Base
   end
 
   def unfollow(user)
-    active_relationships.find_by(following_id: user.id).destroy
+    FollowRelation.find_by(following_id: id, follower_id: user.id).destroy
     UnfollowRelation.create(unfollowing_id: user.id, unfollower_id: id) rescue nil?
   end
 
   def new_followers
-    User.where(id: [passive_relationships.where(new: :true).map(&:follower_id)])
+    User.where(id: [passive_relationships.where(new: :true).map(&:follower_id)]).all
   end
 
   def unfollowers
-    User.joins('join unfollow_relations on users.id = unfollow_relations.unfollower_id')
+    User.joins('join unfollow_relations on users.id = unfollow_relations.unfollower_id').where('unfollow_relations.unfollowing_id = ?', id).all
   end
 
   private

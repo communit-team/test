@@ -36,18 +36,30 @@ class Communit2.Pages.Dashboard
       @render_follower(response, '#new-followers-container')
     )
 
-  @dismiss: (id) ->
+  @dismiss_new_follower: (id) ->
     $.ajax(
-      url: "users/dismiss"
+      url: "users/dismiss_new_follower"
       data: {id: id, index: @current_new_follower_index}
     ).done( (response) =>
-      $("#user-widget-#{id}").fadeOut()
-      @render_follower(response, '#new-followers-container')
+      $("#user-widget-#{id}").fadeOut( 1000, =>
+        @render_follower(response, '#new-followers-container')
+      )
     )
+
+  @dismiss_unfollower: (id) ->
+    $.ajax(
+      url: "users/dismiss_unfollower"
+      data: {id: id, index: @current_unfollower_index}
+    ).done( (response) =>
+      $("#user-widget-#{id}").fadeOut( 1000, =>
+        @render_follower(response, '#new-unfollowers-container')
+      )
+    )
+
 
   @render_follower: (data, container) ->
     if data
       user = new Communit2.Models.User data
       userView = new Communit2.Views.Users model: user
-      $(container).append userView.render().$el
+      $(container).append userView.render(container).$el
 
