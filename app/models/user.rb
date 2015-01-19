@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   after_initialize :assign_defaults
 
   def self.from_omniauth(auth)
+    user = User.find_by(auth.slice(:uid))
+    @@new_user = !user
     where(auth.slice(:uid)).first_or_initialize.tap do |user|
       user.uid = auth.uid
       user.name = auth.info.name
@@ -22,7 +24,6 @@ class User < ActiveRecord::Base
       user.screen_name = auth.extra.raw_info.screen_name
       user.profile_image_url = auth.extra.raw_info.profile_image_url.to_s,
       user.save!
-      @@new_user = true
     end
   end
 
