@@ -1,4 +1,4 @@
-<div>
+<div id='user-widget-<%=@id%>'>
   <div>
     <img src="<%=@profile_image_url%>" />
   </div>
@@ -16,7 +16,7 @@
       Button Say Hi
     </div>
   </div>
-  <div>
+  <div onclick='Communit2.Pages.Dashboard.dismiss(<%=@id%>)'>
     X
   </div>
 </div>

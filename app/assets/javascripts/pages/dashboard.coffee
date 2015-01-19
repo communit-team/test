@@ -1,17 +1,35 @@
 class Communit2.Pages.Dashboard
 
-  @initialize: ->
-    @get_new_follower(1)
-    @get_new_follower(2)
-    @get_new_follower(3)
+  @current_new_follower_index = 1
 
-  @get_new_follower: (index) ->
+  @initialize: ->
+    @get_new_follower()
+    @get_new_follower()
+    @get_new_follower()
+
+  @get_new_follower: ->
+    @get_new_follower_by_index(@current_new_follower_index)
+    @current_new_follower_index++
+
+  @get_new_follower_by_index: (index) ->
     $.ajax(
       url: "users/new_follower"
       data: {index: index}
-    ).done( (response) ->
-      if response
-        user = new Communit2.Models.User response
-        userView = new Communit2.Views.Users model: user
-        $('#new-followers-container').append userView.render().$el
+    ).done( (response) =>
+      @render_new_follower(response)
     )
+
+  @dismiss: (id) ->
+    $.ajax(
+      url: "users/dismiss"
+      data: {id: id, index: @current_new_follower_index}
+    ).done( (response) =>
+      $("#user-widget-#{id}").fadeOut()
+      @render_new_follower(response)
+    )
+
+  @render_new_follower: (data) ->
+    if data
+      user = new Communit2.Models.User data
+      userView = new Communit2.Views.Users model: user
+      $('#new-followers-container').append userView.render().$el
