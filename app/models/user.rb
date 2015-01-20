@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
   end
 
   def fetch_followers(client)
-    api_followers = client.followers
+    api_followers = client.followers.take(100)
     current_index = 0
 
     api_followers.each do |follower|
