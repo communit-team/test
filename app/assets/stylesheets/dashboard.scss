@@ -1,16 +1,144 @@
 body{
   background: #f3f3f3;
   font-family: 'helvetica';
+  margin:0;
+  padding:0;
+}
+
+#header{
+  height:42px;
+  width:100%;
+  background:#41afec;
+}
+
+#header-item1{
+  background: image-url("header-item1.jpg");
+  width:363px;
+  height:42px;
+  float:left;
+}
+
+#header-item2{
+  background: image-url("header-item2.jpg");
+  width:272px;
+  height:42px;
+  float:right;
 }
 
 #wrapper{
   width:900px;
-  margin:30px auto;
+  margin-top:28px;
+  margin-left:229px;
 }
 
 .followers-container{
   background:#FFF;
   width:284px;
   float:left;
-  margin-right:40px;
+  margin-right:34px;
+  border: 1px solid #D7D7D7;
+  .card-header{
+    height: 50px;
+      span{
+        float: left;
+        margin-top: 21px;
+        margin-left:15px;
+        font-size:12px;
+        font-weight: bold;
+      }
+  }
+}
+
+.profile-image-container{
+  width: 67px;
+  margin-top:10px;
+  margin-left:10px;
+  float:left;
+  img {
+    border-radius: 3px;
+  }
+}
+
+.user-widget{
+  border-top:1px solid #D7D7D7;
+  float:left;
+  width: 100%;
+  min-height:130px;
+  span.name {
+    font-size: 13px;
+    font-weight: bold;
+  }
+  span{
+    font-size: 13px;
+  }
+}
+
+.user-info{
+  margin-top:10x;
+  float:left;
+  width:196px;
+  min-height: 110px;
+  padding-top:10px;
+}
+
+.close-widget{
+  float:left;
+  font-size:10px;
+  color:#d7d7d7;
+  margin-top:14px;
+  cursor:pointer;
+}
+
+
+.tag{
+  border:1px solid #41afec;
+  border-radius: 3px;
+  color: #41afec;
+  padding: 3px 2px;
+  margin-top:10px;
+  float:left;
+}
+
+.following-you{
+  margin-top: 14px;
+  font-size: 12px;
+  float:left;
+  margin-left: 5px;
+  color:#a4a4a4;
+}
+
+.number-of-followers{
+  margin-top: 7px;
+  font-size:12px;
+  color:#7A7A7A;
+}
+
+.cb{ clear:both; }
+
+.follow-button{
+  background: image-url("follow.jpg");
+  width:65px;
+  height:21px;
+  margin-top: 13px;
+  float:left;
+  cursor:pointer;
+}
+
+.unfollow-button{
+  background: image-url("unfollow.jpg");
+  width:77px;
+  height:20px;
+  margin-top: 13px;
+  float:left;
+  cursor:pointer;
+}
+
+.say-hi-button{
+  background: image-url("say-hi.jpg");
+  width:65px;
+  height:20px;
+  margin-top: 13px;
+  float:left;
+  margin-left:4px;
+  cursor:pointer;
 }

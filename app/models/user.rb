@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_many :followers, through: :passive_relationships
 
   after_initialize :assign_defaults
+  after_initialize :first_name
 
   def self.from_omniauth(auth)
     user = User.find_by(auth.slice(:uid))
@@ -25,6 +26,10 @@ class User < ActiveRecord::Base
       user.profile_image_url = auth.extra.raw_info.profile_image_url.to_s,
       user.save!
     end
+  end
+
+  def first_name
+    self.name = self.name.split(" ").first
   end
 
   def fetch_followers(client)

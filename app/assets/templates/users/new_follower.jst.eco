@@ -1,26 +1,30 @@
-<div id='user-widget-<%=@id%>'>
-  <div>
+<div id='user-widget-<%=@id%>' class='user-widget'>
+  <div class='profile-image-container'>
     <img src="<%=@profile_image_url%>" />
   </div>
-  <div>
+  <div class='user-info'>
     <div>
-      <%=@name%>
-      @<%=@screen_name%>
+      <span class='name'><%=@name%></span>
+      <span>@<%=@screen_name%></span>
     </div>
     <div>
-      Tag
-      Following you
+      <span class='tag'>Tag</span>
+      <span class='following-you'>Following you</span>
+    </div>
+    <div class='cb'></div>
+    <div class='number-of-followers'>
+      <b>103</b> followers
     </div>
     <div>
       <% if @following: %>
-        unfollow
+        <div class='unfollow-button'></div>
       <% else: %>
-        follow
+        <div class='follow-button'></div>
       <% end %>
-      Say Hi
+        <div class='say-hi-button'></div>
     </div>
   </div>
-  <div onclick='Communit2.Pages.Dashboard.dismiss_new_follower(<%=@id%>)'>
+  <div class='close-widget' onclick='Communit2.Pages.Dashboard.dismiss_new_follower(<%=@id%>)'>
     X
   </div>
 </div>
