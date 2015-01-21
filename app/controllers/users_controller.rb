@@ -10,6 +10,32 @@ class UsersController < ApplicationController
     render json: unfollower.to_json
   end
 
+  def follow
+    user = User.find params[:id]
+    if user
+      current_user.follow user
+      #call twitter API
+    end
+    new_user = get_new_user(params[:callback_container],params[:index].to_i)
+    render json: new_user.to_json
+  end
+
+  def unfollow
+    user = User.find params[:id]
+    if user
+      current_user.unfollow user rescue nil?
+      #call twitter API
+    end
+    new_user = get_new_user(params[:callback_container],params[:index].to_i)
+    render json: new_user.to_json
+  end
+
+  def say_hi
+    #call API
+    new_user = get_new_user(params[:callback_container],params[:index].to_i)
+    render json: new_user.to_json
+  end
+
   def dismiss_new_follower
     fr = FollowRelation.find_by(follower_id: params[:id], following_id: current_user.id)
     if fr
@@ -31,6 +57,15 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def get_new_user(callbackContainer, index)
+    if callbackContainer == "#new-unfollowers-container"
+      return get_unfollower_by_index(index)
+    end
+    if callbackContainer == "#new-followers-container"
+      return get_new_follower_by_index(index)
+    end
+  end
 
   def get_new_follower_by_index(index)
     json = {}

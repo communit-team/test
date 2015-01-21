@@ -41,9 +41,7 @@ class Communit2.Pages.Dashboard
       url: "users/dismiss_new_follower"
       data: {id: id, index: @current_new_follower_index}
     ).done( (response) =>
-      $("#user-widget-#{id}").fadeOut( 1000, =>
-        @render_follower(response, '#new-followers-container')
-      )
+      @renderResponse('#new-followers-container', response, id)
     )
 
   @dismiss_unfollower: (id) ->
@@ -51,10 +49,43 @@ class Communit2.Pages.Dashboard
       url: "users/dismiss_unfollower"
       data: {id: id, index: @current_unfollower_index}
     ).done( (response) =>
-      $("#user-widget-#{id}").fadeOut( 1000, =>
-        @render_follower(response, '#new-unfollowers-container')
-      )
+      @renderResponse('#new-unfollowers-container', response, id)
     )
+
+  @follow: (id, callbackContainer) ->
+    index = if callbackContainer is '#new-unfollowers-container' then @current_unfollower_index else @current_follower_index
+    $.ajax(
+      url: "users/follow"
+      data: {id: id, index: index, callback_container: callbackContainer}
+    ).done( (response) =>
+      @renderResponse(callbackContainer, response, id)
+    )
+
+  @unfollow: (id, callbackContainer) ->
+    index = if callbackContainer is '#new-unfollowers-container' then @current_unfollower_index else @current_follower_index
+    $.ajax(
+      url: "users/unfollow"
+      data: {id: id, index: index, callback_container: callbackContainer}
+    ).done( (response) =>
+      @renderResponse(callbackContainer, response, id)
+    )
+
+  @sayHi: (id, callbackContainer) ->
+    index = if callbackContainer is '#new-unfollowers-container' then @current_unfollower_index else @current_follower_index
+    $.ajax(
+      url: "users/say_hi"
+      data: {id: id, index: index, callback_container: callbackContainer}
+    ).done( (response) =>
+      @renderResponse(callbackContainer, response, id)
+    )
+
+
+   @renderResponse: (callbackContainer, response, id) ->
+     if callbackContainer is '#new-unfollowers-container' then @current_unfollower_index++
+     if callbackContainer is '#new-followers-container' then @current_new_follower_index++
+     $("#user-widget-#{id}").fadeOut( 1000, =>
+       @render_follower(response, callbackContainer)
+     )
 
 
   @render_follower: (data, container) ->

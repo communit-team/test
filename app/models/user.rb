@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
 
   after_initialize :assign_defaults
   after_initialize :first_name
+  after_initialize :commas_to_number_of_followers
 
   def self.from_omniauth(auth)
     user = User.find_by(auth.slice(:uid))
@@ -29,7 +30,11 @@ class User < ActiveRecord::Base
   end
 
   def first_name
-    self.name = self.name.split(" ").first
+    self.name = self.name.split(" ").first if self.name
+  end
+
+  def commas_to_number_of_followers
+    self.number_of_followers = self.number_of_followers.to_s.gsub(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{','}") if self.number_of_followers
   end
 
   def fetch_followers(client)
@@ -62,7 +67,7 @@ class User < ActiveRecord::Base
 
   def unfollow(user)
     FollowRelation.find_by(following_id: id, follower_id: user.id).destroy
-    UnfollowRelation.create(unfollowing_id: id, unfollower_id: user.id) rescue nil?
+    UnfollowRelation.create(unfollowing_id: user.id, unfollower_id: id) rescue nil?
   end
 
   def new_followers

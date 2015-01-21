@@ -13,15 +13,15 @@
     </div>
     <div class='cb'></div>
     <div class='number-of-followers'>
-      <b>103</b> followers
+      <b><%=@number_of_followers%></b> followers
     </div>
     <div>
       <% if @following: %>
-        <div class='unfollow-button'></div>
+        <div class='unfollow-button' onclick='Communit2.Pages.Dashboard.unfollow(<%=@id%>,"#new-unfollowers-container")'></div>
       <% else: %>
-        <div class='follow-button'></div>
+        <div class='follow-button' onclick='Communit2.Pages.Dashboard.follow(<%=@id%>,"#new-unfollowers-container")'></div>
       <% end %>
-        <div class='say-hi-button'></div>
+        <div class='say-hi-button' onclick='Communit2.Pages.Dashboard.sayHi(<%=@id%>,"#new-followers-container")'></div>
     </div>
   </div>
   <div class='close-widget' onclick='Communit2.Pages.Dashboard.dismiss_unfollower(<%=@id%>)'>
