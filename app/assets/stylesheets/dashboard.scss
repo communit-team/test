@@ -73,6 +73,10 @@ body{
   }
 }
 
+.user-widget:hover{
+  background: #F5F5F5;
+}
+
 .user-info{
   margin-top:10x;
   float:left;
@@ -96,6 +100,7 @@ body{
   color: #41afec;
   padding: 3px 2px;
   margin-top:10px;
+  font-size:12px;
   float:left;
 }
 

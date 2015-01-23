@@ -1,94 +1,88 @@
 class Communit2.Pages.Dashboard
 
-  @current_new_follower_index = 1
-  @current_unfollower_index = 1
+  @currentNewFollowerIndex = 1
+  @currentUnfollowerIndex = 1
 
   @initialize: ->
-    @get_new_follower()
-    @get_new_follower()
-    @get_new_follower()
-    @get_unfollower()
-    @get_unfollower()
-    @get_unfollower()
+    @getNewFollower()
+    @getNewFollower()
+    @getNewFollower()
+    @getUnfollower()
+    @getUnfollower()
+    @getUnfollower()
+    @currentNewFollowerIndex--
+    @currentUnfollowerIndex--
 
-  @get_unfollower: ->
-    @get_unfollower_by_index(@current_unfollower_index)
-    @current_unfollower_index++
+  @getUnfollower: ->
+    @getUnfollowerByIndex(@currentUnfollowerIndex)
+    @currentUnfollowerIndex++
 
-  @get_unfollower_by_index: (index) ->
+  @getUnfollowerByIndex: (index) ->
     $.ajax(
       url: "users/unfollower"
       data: {index: index}
     ).done( (response) =>
-      @render_follower(response, '#new-unfollowers-container')
+      @renderFollower(response, '#new-unfollowers-container')
     )
 
+  @getNewFollower: ->
+    @getNewFollowerByIndex(@currentNewFollowerIndex)
+    @currentNewFollowerIndex++
 
-  @get_new_follower: ->
-    @get_new_follower_by_index(@current_new_follower_index)
-    @current_new_follower_index++
-
-  @get_new_follower_by_index: (index) ->
+  @getNewFollowerByIndex: (index) ->
     $.ajax(
       url: "users/new_follower"
       data: {index: index}
     ).done( (response) =>
-      @render_follower(response, '#new-followers-container')
+      @renderFollower(response, '#new-followers-container')
     )
 
-  @dismiss_new_follower: (id) ->
+  @dismissNewFollower: (id) ->
     $.ajax(
       url: "users/dismiss_new_follower"
-      data: {id: id, index: @current_new_follower_index}
+      data: {id: id, index: @currentNewFollowerIndex}
     ).done( (response) =>
       @renderResponse('#new-followers-container', response, id)
     )
 
-  @dismiss_unfollower: (id) ->
+  @dismissUnfollower: (id) ->
     $.ajax(
       url: "users/dismiss_unfollower"
-      data: {id: id, index: @current_unfollower_index}
+      data: {id: id, index: @currentNewFollowerIndex}
     ).done( (response) =>
       @renderResponse('#new-unfollowers-container', response, id)
     )
 
   @follow: (id, callbackContainer) ->
-    index = if callbackContainer is '#new-unfollowers-container' then @current_unfollower_index else @current_follower_index
-    $.ajax(
-      url: "users/follow"
-      data: {id: id, index: index, callback_container: callbackContainer}
-    ).done( (response) =>
-      @renderResponse(callbackContainer, response, id)
-    )
+    @genericAjax id, callbackContainer, "users/follow"
 
   @unfollow: (id, callbackContainer) ->
-    index = if callbackContainer is '#new-unfollowers-container' then @current_unfollower_index else @current_follower_index
-    $.ajax(
-      url: "users/unfollow"
-      data: {id: id, index: index, callback_container: callbackContainer}
-    ).done( (response) =>
-      @renderResponse(callbackContainer, response, id)
-    )
+    @genericAjax id, callbackContainer, "users/unfollow"
 
   @sayHi: (id, callbackContainer) ->
-    index = if callbackContainer is '#new-unfollowers-container' then @current_unfollower_index else @current_follower_index
+    @genericAjax id, callbackContainer, "users/say_hi"
+
+  @genericAjax: (id, callbackContainer, url)->
+    index = @getIndex callbackContainer
     $.ajax(
-      url: "users/say_hi"
+      url: url
       data: {id: id, index: index, callback_container: callbackContainer}
     ).done( (response) =>
       @renderResponse(callbackContainer, response, id)
     )
 
+  @getIndex: (callbackContainer) ->
+    if callbackContainer is '#new-unfollowers-container'
+      return @currentUnfollowerIndex
+    if callbackContainer is '#new-followers-container'
+      return @currentNewFollowerIndex
 
-   @renderResponse: (callbackContainer, response, id) ->
-     if callbackContainer is '#new-unfollowers-container' then @current_unfollower_index++
-     if callbackContainer is '#new-followers-container' then @current_new_follower_index++
-     $("#user-widget-#{id}").fadeOut( 1000, =>
-       @render_follower(response, callbackContainer)
-     )
+  @renderResponse: (callbackContainer, response, id) ->
+    $("#user-widget-#{id}").fadeOut( 1000, =>
+     @renderFollower(response, callbackContainer)
+    )
 
-
-  @render_follower: (data, container) ->
+  @renderFollower: (data, container) ->
     if data
       user = new Communit2.Models.User data
       userView = new Communit2.Views.Users model: user

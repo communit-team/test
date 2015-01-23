@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
   end
 
   def unfollow(user)
-    FollowRelation.find_by(following_id: id, follower_id: user.id).destroy
+    FollowRelation.find_by(following_id: user.id, follower_id: id).destroy rescue nil?
     UnfollowRelation.create(unfollowing_id: user.id, unfollower_id: id) rescue nil?
   end
 

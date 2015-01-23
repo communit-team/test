@@ -8,7 +8,7 @@
       <span>@<%=@screen_name%></span>
     </div>
     <div>
-      <span class='tag'>Tag</span>
+      <span class='tag'>Influencer</span>
       <span class='following-you'>Following you</span>
     </div>
     <div class='cb'></div>
@@ -24,7 +24,7 @@
         <div class='say-hi-button' onclick='Communit2.Pages.Dashboard.sayHi(<%=@id%>,"#new-followers-container")'></div>
     </div>
   </div>
-  <div class='close-widget' onclick='Communit2.Pages.Dashboard.dismiss_new_follower(<%=@id%>)'>
+  <div class='close-widget' onclick='Communit2.Pages.Dashboard.dismissNewFollower(<%=@id%>)'>
     X
   </div>
 </div>

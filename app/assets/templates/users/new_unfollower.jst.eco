@@ -21,10 +21,10 @@
       <% else: %>
         <div class='follow-button' onclick='Communit2.Pages.Dashboard.follow(<%=@id%>,"#new-unfollowers-container")'></div>
       <% end %>
-        <div class='say-hi-button' onclick='Communit2.Pages.Dashboard.sayHi(<%=@id%>,"#new-followers-container")'></div>
+        <div class='say-hi-button' onclick='Communit2.Pages.Dashboard.sayHi(<%=@id%>,"#new-unfollowers-container")'></div>
     </div>
   </div>
-  <div class='close-widget' onclick='Communit2.Pages.Dashboard.dismiss_unfollower(<%=@id%>)'>
+  <div class='close-widget' onclick='Communit2.Pages.Dashboard.dismissUnfollower(<%=@id%>)'>
     X
   </div>
 </div>

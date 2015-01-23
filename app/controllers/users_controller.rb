@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
 
+  before_action :make_follower_old, except: [:new_follower, :unfollower]
+  before_action :delete_unfollower, except: [:new_follower, :unfollower]
+
   def new_follower
     new_follower = get_new_follower_by_index(params[:index].to_i)
     render json: new_follower.to_json
@@ -37,26 +40,30 @@ class UsersController < ApplicationController
   end
 
   def dismiss_new_follower
-    fr = FollowRelation.find_by(follower_id: params[:id], following_id: current_user.id)
-    if fr
-      fr.update_attributes(new: :false)
-    end
-
     new_follower = get_new_follower_by_index(params[:index].to_i)
     render json: new_follower.to_json
   end
 
   def dismiss_unfollower
-    ur = UnfollowRelation.find_by(unfollower_id: params[:id], unfollowing_id: current_user.id)
-    if ur
-      ur.delete
-    end
-
     unfollower = get_unfollower_by_index(params[:index].to_i)
     render json: unfollower.to_json
   end
 
   private
+
+  def delete_unfollower
+    ur = UnfollowRelation.find_by(unfollower_id: params[:id], unfollowing_id: current_user.id)
+    if ur
+      ur.delete
+    end
+  end
+
+  def make_follower_old
+    fr = FollowRelation.find_by(follower_id: params[:id], following_id: current_user.id)
+    if fr
+      fr.update_attributes(new: :false)
+    end
+  end
 
   def get_new_user(callbackContainer, index)
     if callbackContainer == "#new-unfollowers-container"
