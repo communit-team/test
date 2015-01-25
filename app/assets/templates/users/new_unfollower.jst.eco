@@ -8,7 +8,9 @@
       <span>@<%=@screen_name%></span>
     </div>
     <div>
-      <span class='tag'>Tag</span>
+      <% if @number_of_followers > 100: %>
+        <span class='tag'>Influencer</span>
+      <% end %>
       <span class='following-you'><b>Not</b> Following you</span>
     </div>
     <div class='cb'></div>
